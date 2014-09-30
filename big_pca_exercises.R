@@ -53,14 +53,34 @@ object.size(m.dense)
 #         observation with covariance matrix m.sparse.  Check that the covariance
 #         is correct.  Generate a plot of the first row showing that adjacent columns
 #         are correlated with one another.
+
+makeData <- function(n, p, m, max.corr = 0.5) {
+ sigma <- GetCov(p, m, 0.5, T)
+ t(chol(sigma)) %*% rnorm() %*% chol(sigma)
+ mvrnorm(n, rep(0, p), Sigma = sigma)
+}
+dd <- makeData(10,20,5)
+
 # Task 2: Use scale() to center and scale the columns.
+
+dd_scaled <- scale(dd)
+
 # Task 3: Calculate the principal components using the four
 #         functions svd(), irlba(), eigen(), and irlba().
 #         With irlba(), just look at the top five.
 #         Confirm that they give the same answer.  Note:
 #         you need to think about the normalizing constants.
+svd(dd_scaled)
+require(irlba)
+irlba(dd_scaled, 5)
+eigen(cor(dd_scaled))
+
+
+
 # Task 4: Use microbenchmark to compare the speeds.  What method
 #         is the fastest?
+
+
 # Task 5: Implement the power method to find the top eigenvalue
 #         and eigenvector.  (You can use a for loop.)  Check that
 #         it matches the other methods.
@@ -70,3 +90,4 @@ object.size(m.dense)
 
 # If you get stuck, you can find answers to all but task 6 in big_pca.R, though it will
 # be best if you do it yourself!
+

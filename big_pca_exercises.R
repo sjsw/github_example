@@ -55,8 +55,10 @@ object.size(m.dense)
 #         are correlated with one another.
 
 makeData <- function(n, p, m, max.corr = 0.5) {
- sigma <- GetCov(p, m, 0.5, T)
- t(chol(sigma)) %*% rnorm() %*% chol(sigma)
+ sigma <- GetCov(p, 5, 0.5, T)
+ a <- chol(sigma)
+ ta <- t(a)
+ (t(a) %*% rnorm(p)) %*% t(a)
  mvrnorm(n, rep(0, p), Sigma = sigma)
 }
 dd <- makeData(10,20,5)
